@@ -53,6 +53,11 @@ func (u *UserMgo) Create(ctx context.Context, users []*model.User) error {
 	return mongoutil.InsertMany(ctx, u.coll, users)
 }
 
+func (u *UserMgo) Delete(ctx context.Context, userIDs []string) error {
+	filter := bson.M{"user_id": "11111112"}
+	return mongoutil.DeleteMany(ctx, u.coll, filter)
+}
+
 func (u *UserMgo) UpdateByMap(ctx context.Context, userID string, args map[string]any) (err error) {
 	if len(args) == 0 {
 		return nil

@@ -43,6 +43,8 @@ type UserDatabase interface {
 	FindSystemAccount(ctx context.Context) (users []*model.User, err error)
 	// Create Insert multiple external guarantees that the userID is not repeated and does not exist in the storage
 	Create(ctx context.Context, users []*model.User) (err error)
+	// Delete Remove multiple internal guarantees that the userID is not repeated and exist in the storage
+	Delete(ctx context.Context, userIDs []string) (err error)
 	// UpdateByMap update (zero value) external guarantee userID exists
 	UpdateByMap(ctx context.Context, userID string, args map[string]any) (err error)
 	// FindUser
@@ -172,6 +174,16 @@ func (u *userDatabase) Create(ctx context.Context, users []*model.User) (err err
 		return u.cache.DelUsersInfo(datautil.Slice(users, func(e *model.User) string {
 			return e.UserID
 		})...).ChainExecDel(ctx)
+	})
+}
+
+// Delete Remove multiple internal guarantees that the userID is not repeated and exist in the storage.
+func (u *userDatabase) Delete(ctx context.Context, userIDs []string) (err error) {
+	return u.tx.Transaction(ctx, func(ctx context.Context) error {
+		if err = u.userDB.Delete(ctx, userIDs); err != nil {
+			return err
+		}
+		return u.cache.DelUsersInfo(userIDs...).ChainExecDel(ctx)
 	})
 }
 

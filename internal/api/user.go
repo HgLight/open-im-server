@@ -41,6 +41,10 @@ func (u *UserApi) UserRegister(c *gin.Context) {
 	a2r.Call(c, user.UserClient.UserRegister, u.Client)
 }
 
+func (u *UserApi) UserDelete(c *gin.Context) {
+	a2r.Call(c, user.UserClient.UserDelete, u.Client)
+}
+
 // UpdateUserInfo is deprecated. Use UpdateUserInfoEx
 func (u *UserApi) UpdateUserInfo(c *gin.Context) {
 	a2r.Call(c, user.UserClient.UpdateUserInfo, u.Client)

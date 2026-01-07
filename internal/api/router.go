@@ -121,6 +121,7 @@ func newGinRouter(ctx context.Context, client discovery.SvcDiscoveryRegistry, cf
 	{
 		userRouterGroup := r.Group("/user")
 		userRouterGroup.POST("/user_register", u.UserRegister)
+		userRouterGroup.POST("/user_delete", u.UserDelete)
 		userRouterGroup.POST("/update_user_info", u.UpdateUserInfo)
 		userRouterGroup.POST("/update_user_info_ex", u.UpdateUserInfoEx)
 		userRouterGroup.POST("/set_global_msg_recv_opt", u.SetGlobalRecvMessageOpt)

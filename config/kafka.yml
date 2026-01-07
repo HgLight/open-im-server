@@ -1,13 +1,13 @@
 ## Kafka authentication
-username:
-password:
+username: ''
+password: ''
 
 # Producer acknowledgment settings
-producerAck:
+producerAck: 1
 # Compression type to use (e.g., none, gzip, snappy)
-compressType: none
+compressType: snappy
 # List of Kafka broker addresses
-address: [localhost:19094]
+address: [localhost:9092]
 # Kafka topic for Redis integration
 toRedisTopic: toRedis
 # Kafka topic for MongoDB integration

@@ -343,6 +343,59 @@ func (s *userServer) UserRegister(ctx context.Context, req *pbuser.UserRegisterR
 	return resp, nil
 }
 
+func (s *userServer) UserDelete(ctx context.Context, req *pbuser.UserDeleteReq) (resp *pbuser.UserDeleteResp, err error) {
+	if len(req.UserIDs) == 0 {
+		return nil, errs.ErrArgs.WrapMsg("userIDs is empty")
+	}
+	if err = authverify.CheckAdmin(ctx); err != nil {
+		return nil, err
+	}
+	if datautil.Duplicate(req.UserIDs) {
+		return nil, errs.ErrArgs.WrapMsg("userID repeated")
+	}
+	for _, user := range req.UserIDs {
+		if user == "" {
+			return nil, errs.ErrArgs.WrapMsg("userID is empty")
+		}
+		if strings.Contains(user, ":") {
+			return nil, errs.ErrArgs.WrapMsg("userID contains ':' is invalid userID")
+		}
+	}
+	exist, err := s.db.IsExist(ctx, req.UserIDs)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, servererrs.ErrUserIDNotFound.WrapMsg("No registration record found for this UserID")
+	}
+	// TODO
+	//if err := s.webhookBeforeUserRegister(ctx, &s.config.WebhooksConfig.BeforeUserRegister, req); err != nil {
+	//	return nil, err
+	//}
+	if err := s.db.Delete(ctx, req.UserIDs); err != nil {
+		return nil, err
+	}
+
+	// TODO
+	//prommetrics.UserRegisterCounter.Add(float64(len(users)))
+
+	// TODO
+	//s.webhookAfterUserRegister(ctx, &s.config.WebhooksConfig.AfterUserRegister, req)
+	return resp, nil
+
+	// 分割线
+	//err = s.db.DeleteUserCommand(ctx, req.UserID, req.Type, req.Uuid)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//tips := &sdkws.UserCommandDeleteTips{
+	//	FromUserID: req.UserID,
+	//	ToUserID:   req.UserID,
+	//}
+	//s.userNotificationSender.UserCommandDeleteNotification(ctx, tips)
+	//return &pbuser.ProcessUserCommandDeleteResp{}, nil
+}
+
 func (s *userServer) GetGlobalRecvMessageOpt(ctx context.Context, req *pbuser.GetGlobalRecvMessageOptReq) (resp *pbuser.GetGlobalRecvMessageOptResp, err error) {
 	user, err := s.db.FindWithError(ctx, []string{req.UserID})
 	if err != nil {

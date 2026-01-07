@@ -258,7 +258,9 @@ services:
       - openim
 
   openim-web-front:
-    image: ${OPENIM_WEB_FRONT_IMAGE}
+    #image: ${OPENIM_WEB_FRONT_IMAGE}
+    image: registry.cn-hangzhou.aliyuncs.com/openimsdk/openim-web-front:latest  # 阿里云国内源
+    # image: registry.gitee.com/openimsdk/openim-web-front:latest
     container_name: openim-web-front
     restart: always
     ports:

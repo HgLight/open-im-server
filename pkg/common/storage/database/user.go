@@ -25,6 +25,7 @@ import (
 
 type User interface {
 	Create(ctx context.Context, users []*model.User) (err error)
+	Delete(ctx context.Context, userIDs []string) (err error)
 	UpdateByMap(ctx context.Context, userID string, args map[string]any) (err error)
 	Find(ctx context.Context, userIDs []string) (users []*model.User, err error)
 	Take(ctx context.Context, userID string) (user *model.User, err error)
