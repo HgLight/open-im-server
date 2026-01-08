@@ -1,8 +1,7 @@
-address: [localhost:6379]
-username:
-password: openIM123
-# redis Mode, including "standalone","cluster","sentinel"
-redisMode: "standalone"
+address: [ localhost:6380 ]
+username: 
+password: yjkjP@ssw0rd123
+clusterMode: false
 db: 0
 maxRetry: 10
 poolSize: 100

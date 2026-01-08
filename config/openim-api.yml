@@ -14,16 +14,6 @@ prometheus:
   autoSetPorts: true
   # Prometheus listening ports, must match the number of api.ports
   # It will only take effect when autoSetPorts is set to false.
-  ports:
+  ports: [ 12002 ]
   # This address can be accessed via a browser
-  grafanaURL:
-
-ratelimiter:
-  # Whether to enable rate limiting
-  enable: false
-  # WindowSize defines time duration per window
-  window: 20s
-  # BucketNum defines bucket number for each window
-  bucket: 500
-  # CPU threshold; valid range 0–1000 (1000 = 100%)
-  cpuThreshold: 850
+  grafanaURL: http://127.0.0.1:13000/
